@@ -47,6 +47,7 @@ public class Agente extends javax.swing.JFrame {
         campoPesquisar = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         btnPesquisar = new javax.swing.JButton();
+        limpaCampo = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaResponsaveis = new javax.swing.JTable();
@@ -57,7 +58,7 @@ public class Agente extends javax.swing.JFrame {
         campoTelefone = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cadastro produtos");
+        setTitle("Responsaveis");
         setBackground(new java.awt.Color(204, 204, 204));
         setResizable(false);
         setSize(new java.awt.Dimension(0, 0));
@@ -145,6 +146,13 @@ public class Agente extends javax.swing.JFrame {
             }
         });
 
+        limpaCampo.setText("Limpar Campos");
+        limpaCampo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limpaCampoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -156,7 +164,9 @@ public class Agente extends javax.swing.JFrame {
                 .addComponent(campoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPesquisar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addComponent(limpaCampo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoSalvar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoDeletar)
@@ -171,8 +181,9 @@ public class Agente extends javax.swing.JFrame {
                     .addComponent(botaoDeletar)
                     .addComponent(campoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(btnPesquisar))
-                .addContainerGap(12, Short.MAX_VALUE))
+                    .addComponent(btnPesquisar)
+                    .addComponent(limpaCampo))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanel2);
@@ -359,6 +370,15 @@ public class Agente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoCargoActionPerformed
 
+    private void limpaCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpaCampoActionPerformed
+        // TODO add your handling code here:
+       campoId.setText("");
+        campoNome.setText("");
+        campoCargo.setText("");
+        campoEmail.setText("");
+        campoTelefone.setText(""); 
+    }//GEN-LAST:event_limpaCampoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -425,6 +445,7 @@ public class Agente extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton limpaCampo;
     private javax.swing.JTable tabelaResponsaveis;
     // End of variables declaration//GEN-END:variables
 }

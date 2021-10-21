@@ -18,7 +18,17 @@ public class Chamado {
     private Date data_hora_abertura;
     private int id_responsavel;
     private String status;
+    private int id_cliente;
     private String nome_cliente;
+    private String nome_responsavel;
+
+    public String getNome_responsavel() {
+        return nome_responsavel;
+    }
+
+    public void setNome_responsavel(String nome_responsavel) {
+        this.nome_responsavel = nome_responsavel;
+    }
 
     public String getNome_cliente() {
         return nome_cliente;
@@ -26,6 +36,14 @@ public class Chamado {
 
     public void setNome_cliente(String nome_cliente) {
         this.nome_cliente = nome_cliente;
+    }
+
+    public int getId_cliente() {
+        return id_cliente;
+    }
+
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
 
     public int getId() {

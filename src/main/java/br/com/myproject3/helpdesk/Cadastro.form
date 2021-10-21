@@ -193,7 +193,9 @@
                       <Component id="campoPesquisar" min="-2" pref="164" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnPesquisar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="272" max="32767" attributes="0"/>
+                      <EmptySpace pref="61" max="32767" attributes="0"/>
+                      <Component id="limpaCampos" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="botaoSalvar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="botaoDeletar" min="-2" max="-2" attributes="0"/>
@@ -211,6 +213,7 @@
                           <Component id="campoPesquisar" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="btnPesquisar" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="limpaCampos" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="12" max="32767" attributes="0"/>
                   </Group>
@@ -253,6 +256,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPesquisarActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="limpaCampos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Limpar campos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="limpaCamposActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

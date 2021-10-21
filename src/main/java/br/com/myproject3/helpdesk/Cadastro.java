@@ -48,6 +48,7 @@ public class Cadastro extends javax.swing.JFrame {
         campoPesquisar = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         btnPesquisar = new javax.swing.JButton();
+        limpaCampos = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tabelaClientes = new javax.swing.JTable();
@@ -150,6 +151,13 @@ public class Cadastro extends javax.swing.JFrame {
             }
         });
 
+        limpaCampos.setText("Limpar campos");
+        limpaCampos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limpaCamposActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -161,7 +169,9 @@ public class Cadastro extends javax.swing.JFrame {
                 .addComponent(campoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPesquisar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 272, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(limpaCampos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoSalvar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(botaoDeletar)
@@ -176,7 +186,8 @@ public class Cadastro extends javax.swing.JFrame {
                     .addComponent(botaoDeletar)
                     .addComponent(campoPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(btnPesquisar))
+                    .addComponent(btnPesquisar)
+                    .addComponent(limpaCampos))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -401,6 +412,17 @@ public class Cadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoIdActionPerformed
 
+    private void limpaCamposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpaCamposActionPerformed
+        // TODO add your handling code here:
+        campoId.setText("");
+        campoNome.setText("");
+        campoTelefone.setText("");
+        campoEmail.setText("");
+        campoEndereco.setText("");
+        campoCPF.setText("");
+        btnFeminino.setSelected(true);
+    }//GEN-LAST:event_limpaCamposActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -464,6 +486,7 @@ public class Cadastro extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton limpaCampos;
     private javax.swing.JTable tabelaClientes;
     // End of variables declaration//GEN-END:variables
 }

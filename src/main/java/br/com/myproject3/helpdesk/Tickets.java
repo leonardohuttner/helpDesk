@@ -2,6 +2,7 @@ package br.com.myproject3.helpdesk;
 
 
 import models_db.ChamadoDB;
+import models_db.ResponsavelDB;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.myproject3.entities.Responsavel;
@@ -12,7 +13,7 @@ import br.com.myproject3.entities.Chamado;
  *
  * @author Leonardo
  */
-public class Tickets extends javax.swing.JFrame {
+public final class Tickets extends javax.swing.JFrame {
     ChamadoDB chamadoDB = new ChamadoDB();
     
     /**
@@ -21,6 +22,7 @@ public class Tickets extends javax.swing.JFrame {
     public Tickets() {
         initComponents();
         popularTabela();
+        popularComboBox();
     }
 
     /**
@@ -55,11 +57,12 @@ public class Tickets extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         campoDescricao = new javax.swing.JTextArea();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        campoResponsavel = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        limpaCampo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cadastro produtos");
+        setTitle("HelpDesk");
         setBackground(new java.awt.Color(204, 204, 204));
         setResizable(false);
         setSize(new java.awt.Dimension(0, 0));
@@ -177,11 +180,11 @@ public class Tickets extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "Nome", "Cargo", "Email", "Telefone"
+                "Id", "Titulo", "Descricao", "Cliente", "Data", "Responsavel", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -240,14 +243,27 @@ public class Tickets extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(10, 120, 520, 120);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1);
-        jComboBox1.setBounds(550, 140, 210, 40);
+        campoResponsavel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                campoResponsavelActionPerformed(evt);
+            }
+        });
+        jPanel1.add(campoResponsavel);
+        campoResponsavel.setBounds(550, 140, 210, 40);
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Status");
         jPanel1.add(jLabel5);
         jLabel5.setBounds(550, 40, 70, 17);
+
+        limpaCampo.setText("Limpar Edição");
+        limpaCampo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limpaCampoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(limpaCampo);
+        limpaCampo.setBounds(550, 210, 220, 29);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -263,6 +279,23 @@ public class Tickets extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void popularComboBox(){
+            ResponsavelDB resp = new ResponsavelDB();
+        try {
+            Responsavel responsavel = new Responsavel();
+            for (Responsavel r: resp.getAll()){
+                campoResponsavel.addItem(r.getNome());
+            }
+        }  
+        catch(Exception e)  
+        {  
+            JOptionPane.showMessageDialog(null,   
+                "Ocorreu erro ao carregar a Combo Box", "Erro",  
+                JOptionPane.ERROR_MESSAGE);  
+        }       
+ 
+    }  
+    
     public void popularTabela(){
          DefaultTableModel model =(DefaultTableModel) tabelaTickets.getModel();
          model.setNumRows(0);
@@ -277,6 +310,10 @@ public class Tickets extends javax.swing.JFrame {
                         c.getId(),
                         c.getTitulo(),
                         c.getDescricao(),
+                        c.getNome_cliente(),
+                        c.getData_hora_abertura(),
+                        c.getNome_responsavel(),
+                        c.getStatus()
                         });
                     } 
                 JOptionPane.showMessageDialog(null, "A pesquisa retornou "+ model.getRowCount()+" chamados");
@@ -286,6 +323,10 @@ public class Tickets extends javax.swing.JFrame {
                         c.getId(),
                         c.getTitulo(),
                         c.getDescricao(),
+                        c.getNome_cliente(),
+                        c.getData_hora_abertura(),
+                        c.getNome_responsavel(),
+                        c.getStatus()
                      });
                  }
              }
@@ -298,17 +339,24 @@ public class Tickets extends javax.swing.JFrame {
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
         //Botão salvar
         Chamado chamado = new Chamado();
-        chamado.setTitulo(campoTitulo.getText());
-        chamado.setNome_cliente(campoNome.getText());
-        chamado.setDescricao(campoDescricao.getText());
-        chamado.setStatus(campoStatus.getText());
-        
-        //Valida se é edição ou criação
-      if(campoId.getText().length()>0){
-        chamado.setId(Integer.parseInt(campoId.getText()));
-      }
-        chamadoDB.saveOrUpdate(chamado);
-        popularTabela();
+        if(campoTitulo.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Por favor insira um titulo");
+        } else if(campoNome.getText().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Por favor insira um nome");
+        } else {
+            chamado.setTitulo(campoTitulo.getText());
+            chamado.setNome_cliente(campoNome.getText());
+            chamado.setDescricao(campoDescricao.getText());
+            chamado.setStatus(campoStatus.getText());
+            chamado.setNome_responsavel(campoResponsavel.getSelectedItem().toString());
+
+            //Valida se é edição ou criação
+          if(campoId.getText().length()>0){
+            chamado.setId(Integer.parseInt(campoId.getText()));
+          }
+            popularTabela();
+            chamadoDB.saveOrUpdate(chamado);
+        }
     }//GEN-LAST:event_botaoSalvarActionPerformed
 
     private void botaoDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoDeletarActionPerformed
@@ -341,8 +389,12 @@ public class Tickets extends javax.swing.JFrame {
         // Pegar dado da linha selecionada e povoando campos
         campoId.setText(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),0).toString());
         campoTitulo.setText(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),1).toString());
-        campoStatus.setText(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),2).toString());
+        campoDescricao.setText(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),2).toString());
         campoNome.setText(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),3).toString());
+        campoResponsavel.setSelectedItem(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),5).toString());
+        campoStatus.setText(tabelaTickets.getValueAt(tabelaTickets.getSelectedRow(),6).toString());
+        
+
        
     }//GEN-LAST:event_tabelaTicketsMouseClicked
 
@@ -353,6 +405,21 @@ public class Tickets extends javax.swing.JFrame {
     private void campoStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoStatusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_campoStatusActionPerformed
+
+    private void campoResponsavelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoResponsavelActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_campoResponsavelActionPerformed
+
+    private void limpaCampoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limpaCampoActionPerformed
+        // TODO add your handling code here:
+        campoId.setText("");
+        campoTitulo.setText("");
+        campoDescricao.setText("");
+        campoNome.setText("");
+        campoResponsavel.setSelectedItem("default");
+        campoStatus.setText("");
+    }//GEN-LAST:event_limpaCampoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -406,9 +473,9 @@ public class Tickets extends javax.swing.JFrame {
     private javax.swing.JTextField campoId;
     private javax.swing.JTextField campoNome;
     private javax.swing.JTextField campoPesquisar;
+    private javax.swing.JComboBox<String> campoResponsavel;
     private javax.swing.JTextField campoStatus;
     private javax.swing.JTextField campoTitulo;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -422,6 +489,7 @@ public class Tickets extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton limpaCampo;
     private javax.swing.JTable tabelaTickets;
     // End of variables declaration//GEN-END:variables
 }
