@@ -7,6 +7,7 @@ package models_db;
 
 import br.com.myproject3.db.connection;
 import br.com.myproject3.entities.Chamado;
+import br.com.myproject3.helpdesk.Cadastro;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,49 +26,67 @@ import javax.swing.JOptionPane;
 public class ChamadoDB {
     
     private Connection conexao = connection.getConexao();
-
-    public void save(Chamado chamado) {
-            try{
+    
+    public void getIdCliente(Chamado chamado){
+        try{
 //              Testa se o cliente ja é cliente e pega o id
-                PreparedStatement VC = conexao.prepareStatement("SELECT id "
-                        + "FROM clientes WHERE nome = ?");
-                VC.setString(1,chamado.getNome_cliente());
-                ResultSet VCR = VC.executeQuery();
-                if(VCR.next()){
-                    chamado.setId_cliente(VCR.getInt(1));
-                    JOptionPane.showMessageDialog(null, VCR.getInt("id"));
+            PreparedStatement ps = conexao.prepareStatement("SELECT id "
+                    + "FROM clientes WHERE nome = ?");
+            ps.setString(1,chamado.getNome_cliente());
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                chamado.setId_cliente(rs.getInt("id"));
+            }else {
+                chamado.setId_cliente(-1);
+                int novoCadastro = JOptionPane.showConfirmDialog(null, "Cliente não encontrado deseja cadastrar?");
+                if(novoCadastro == 0){
+                    Cadastro cadastro_cliente = new Cadastro();
+                    cadastro_cliente.setVisible(true);
+                }
             }
-                
-//                Testa e pega o id do responsavel
-                try{
-                    PreparedStatement ps = conexao.prepareStatement("SELECT id FROM responsaveis WHERE nome = ?");
-                    ps.setString(1,chamado.getNome_responsavel());
-                    ResultSet rs = ps.executeQuery();
-                        if(rs != null && rs.next()){
-                            chamado.setId_responsavel(rs.getInt(1));
-                        }
-                    
-//                    se esta tudo correto salva
-                    try {
-                        PreparedStatement cx = conexao.prepareStatement("INSERT INTO atendimento (titulo, descricao, id_cliente, data_hora_abertura, id_responsavel, status) values (?,?,?,?,?,?)");
-                        cx.setString(1, chamado.getTitulo());
-                        cx.setString(2, chamado.getDescricao());
-                        cx.setInt(3, chamado.getId_cliente());
-                        cx.setDate(4, new java.sql.Date(System.currentTimeMillis()));
-                        cx.setInt(5, chamado.getId_responsavel());
-                        cx.setString(6, chamado.getStatus());            
-//                        cx.execute();
-                        JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso!");
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }catch(SQLException ex) {
-                    Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro" + ex); 
+            Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void getIdResponsavel(Chamado chamado){
+        try{
+            PreparedStatement ps = conexao.prepareStatement("SELECT id"
+                    + " FROM responsaveis WHERE nome = ?");
+            ps.setString(1,chamado.getNome_responsavel());
+            ResultSet rs = ps.executeQuery();
+                if(rs.next()){
+                    chamado.setId_responsavel(rs.getInt("id"));
+                }else{
+                    chamado.setId_responsavel(-1);
+                    JOptionPane.showMessageDialog(null, "Responsavel não encontrado");
                 }
             }catch(SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Cliente não encontrado, por favor crie um antes de criar um chamado"); 
-                Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void save(Chamado chamado) {
+//                Testa e pega o id do responsavel
+//                    se esta tudo correto salva       
+        try {
+            getIdCliente(chamado);
+            getIdResponsavel(chamado);
+            if(chamado.getId_cliente() > 0 && chamado.getId_responsavel() > 0){
+                PreparedStatement cx = conexao.prepareStatement("INSERT INTO atendimento (titulo, descricao, id_cliente, data_hora_abertura, id_responsavel, status) values (?,?,?,?,?,?)");
+                cx.setString(1, chamado.getTitulo());
+                cx.setString(2, chamado.getDescricao());
+                cx.setInt(3, chamado.getId_cliente());
+                cx.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+                cx.setInt(5, chamado.getId_responsavel());
+                cx.setString(6, chamado.getStatus());            
+                cx.execute();
+                JOptionPane.showMessageDialog(null, "Cadastro efetuado com sucesso!");
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void update(Chamado chamado) {
