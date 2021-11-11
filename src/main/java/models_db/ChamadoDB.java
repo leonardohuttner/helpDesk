@@ -91,38 +91,20 @@ public class ChamadoDB {
     
     public void update(Chamado chamado) {
         try {
-            try{
-                PreparedStatement ps = conexao.prepareStatement("SELECT id FROM clientes WHERE nome = ?");
-                ps.setString(1,chamado.getNome_cliente());
-                ResultSet rs = ps.executeQuery();
-                    while(rs.next()){
-                        chamado.setId_cliente(rs.getInt("id"));
-                    }
-            }catch(SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Cliente não encontrado"); 
-                Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
+            getIdCliente(chamado);
+            getIdResponsavel(chamado);
+            if(chamado.getId_cliente() > 0 && chamado.getId_responsavel() > 0){
+                PreparedStatement ps = conexao.prepareStatement("UPDATE atendimento SET titulo=? , descricao=?, id_cliente=?, data_hora_abertura=?, id_responsavel=?, status= ? WHERE id=? ");
+                ps.setString(1, chamado.getTitulo());
+                ps.setString(2, chamado.getDescricao());
+                ps.setInt(3, chamado.getId_cliente());
+                ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+                ps.setInt(5, chamado.getId_responsavel());
+                ps.setString(6, chamado.getStatus()); 
+                ps.setInt(7, chamado.getId());
+                ps.execute();
+                JOptionPane.showMessageDialog(null, "Chamado atualizado com sucesso!");
             }
-            
-            try{
-                PreparedStatement ps = conexao.prepareStatement("SELECT id FROM responsaveis WHERE nome = ?");
-                ps.setString(1,chamado.getNome_responsavel());
-                ResultSet rs = ps.executeQuery();
-                while(rs.next()){
-                    chamado.setId_responsavel(rs.getInt("id"));
-                }
-            }catch(SQLException ex) {
-                Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            PreparedStatement ps = conexao.prepareStatement("UPDATE atendimento SET titulo=? , descricao=?, id_cliente=?, data_hora_abertura=?, id_responsavel=?, status= ? WHERE id=? ");
-            ps.setString(1, chamado.getTitulo());
-            ps.setString(2, chamado.getDescricao());
-            ps.setInt(3, chamado.getId_cliente());
-            ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
-            ps.setInt(5, chamado.getId_responsavel());
-            ps.setString(6, chamado.getStatus()); 
-            ps.setInt(7, chamado.getId());
-            ps.execute();
-            JOptionPane.showMessageDialog(null, "Chamado atualizado com sucesso!");
         } catch (SQLException ex) {
             Logger.getLogger(Chamado.class.getName()).log(Level.SEVERE, null, ex);
         }
